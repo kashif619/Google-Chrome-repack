@@ -1,0 +1,25 @@
+---
+- name: chrome
+  hosts: 10.95.7.131
+  become: yes
+  tasks:
+  - name: uninstall google-chrome
+    yum: name=google-chrome state=absent
+  - name: Add Yum signing key
+    rpm_key:
+      key: https://dl.google.com/linux/linux_signing_key.pub
+      state: present
+  - name: Add repository into repo.d list
+    yum_repository:
+      name: google-chrome
+      description: google-chrome repository
+      baseurl: http://dl.google.com/linux/chrome/rpm/stable/x86_64
+      enabled: true
+      gpgcheck: true
+      gpgkey: https://dl.google.com/linux/linux_signing_key.pub
+  - name: Install google-chrome-stable
+    yum:
+      name: "google-chrome-stable"
+      state: latest
+      update_cache: true
+                                     
